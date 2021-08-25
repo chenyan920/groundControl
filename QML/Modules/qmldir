@@ -1,0 +1,6 @@
+module CHmi
+
+singleton CTheme 1.0 CTheme.qml
+
+
+

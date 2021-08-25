@@ -1,0 +1,6 @@
+module CuiControls
+
+CuiFeatureButton 1.0 CuiFeatureButton.qml
+CuiGlowingLabel 1.0 CuiGlowingLabel.qml
+CuiCustomGlow 1.0 CuiCustomGlow.qml
+CuiDial 1.0 CuiDial.qml
