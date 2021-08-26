@@ -1,0 +1,5 @@
+module CuiControls
+
+CuiSeparator 1.0 CuiSeparator.qml
+LeftFrame 1.0 LeftFrame.qml
+RightFrame 1.0 RightFrame.qml

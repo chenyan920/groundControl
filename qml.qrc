@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>QML/Blocks/CuiSeparator.qml</file>
+        <file>QML/Blocks/LeftFrame.qml</file>
+        <file>QML/Blocks/qmldir</file>
+        <file>QML/Blocks/RightFrame.qml</file>
+        <file>QML/CControls/CuiCustomGlow.qml</file>
+        <file>QML/CControls/CuiDial.qml</file>
+        <file>QML/CControls/CuiFeatureButton.qml</file>
+        <file>QML/CControls/CuiGlowingLabel.qml</file>
+        <file>QML/CControls/qmldir</file>
+        <file>QML/Modules/CTheme.qml</file>
+        <file>QML/Modules/qmldir</file>
+    </qresource>
+</RCC>
