@@ -3,7 +3,7 @@
 #include "localsetting.h"
 #include <QModelIndex>
 
-HWND CI::mHWND = NULL;
+HWND CI::mHWND = nullptr;
 
 CI::CI(QObject* parent)
     :QObject(parent)
@@ -153,7 +153,7 @@ int CI::startRealPlay(int videoLevel)
     setVideoPath(devSerial);
     OpenNetStream::getInstance()->setDataCallBack(mSessionId, videoDataHandler, this);
 
-    HWND hWnd = NULL;
+    HWND hWnd = nullptr;
     if (LocalSetting::getInstance()->isPlay())
     {
         hWnd = mHWND;
@@ -247,12 +247,13 @@ void CI::videoDataHandler(DataType enType, char * const pData, int iLen, void *p
 
 void CI::setVideoPath(const QString devSerial)
 {
-    time_t rawtime;
-    time (&rawtime);
-    struct tm * timeinfo = localtime(&rawtime);
+    struct tm t;
+    time_t now;
+    time(&now);
+    localtime_s(&t, &now);
     const int buflen = 32;
     char buffer[buflen] = {0};
-    strftime(buffer, buflen, "%Y%m%d%H%M%S", timeinfo);
+    strftime(buffer, buflen, "%Y%m%d%H%M%S", &t);
     const QString strFlag = devSerial + "_" + buffer;
     QString path = QCoreApplication::applicationDirPath();
     mVideoPath = path + "/" + strFlag + ".mp4";

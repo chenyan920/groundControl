@@ -11,7 +11,7 @@ class LocalSetting : public QObject
     Q_PROPERTY(QString appKey READ appKey)
 
 private:
-    explicit LocalSetting(QObject *parent = 0);
+    explicit LocalSetting(QObject *parent = nullptr);
 
 public:
     ~LocalSetting();

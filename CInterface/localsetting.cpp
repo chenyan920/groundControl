@@ -89,9 +89,6 @@ LocalSetting::LocalSetting(QObject *parent) :
         m_bDownload = false;
         settingFile.setValue("OpenAPI/download", m_bDownload);
     }
-    qDebug() << "AuthAddr:" << m_authAddress;
-    qDebug() << "PlatformAddress:" << m_platformAddress;
-    qDebug() << "AppID:" <<  m_appKey;
 }
 
 LocalSetting::~LocalSetting()

@@ -1,28 +1,19 @@
-﻿#include <QMessageBox>
-#include <QDebug>
+﻿#include <QDebug>
 #include <QDir>
 #include <string>
 #include <QCoreApplication>
-using namespace std;
 
 #include "opennetstream.h"
 #include "opennetstream_p.h"
 
-//Begin PTR Define
-#if defined(_WIN32) || defined(_WIN64)
 #define EZOPENSDKNAME "OpenNetStream.dll"
-#elif defined(__linux__)
-#define EZOPENSDKNAME "libOpenNetStream.so"
-#elif defined (ANDROID)
-#define EZOPENSDKNAME "libOpenNetStream.so"
-#elif defined(__APPLE__)
-#define EZOPENSDKNAME "libOpenNetStream.dylib"
-#endif  //END PTR Define
 
+using namespace std;
 OpenNetStream* OpenNetStream::m_instance;
 
-OpenNetStreamPrivate::OpenNetStreamPrivate(OpenNetStream *parent) :
-    q_ptr(parent), m_library(NULL)
+OpenNetStreamPrivate::OpenNetStreamPrivate(OpenNetStream *parent)
+    : q_ptr(parent)
+    , m_library(nullptr)
 {
 }
 
@@ -33,78 +24,78 @@ void OpenNetStreamPrivate::init()
     QString dllPath = QCoreApplication::applicationDirPath().append("/") + EZOPENSDKNAME;
     m_library = new QLibrary(dllPath, q);
     if (m_library->load()) {
-        m_apis.pOpenSDK_InitLib              = (EZSDK_InitLib             )m_library->resolve("OpenSDK_InitLib");
-        m_apis.pOpenSDK_SetAuthAddr          = (EZSDK_SetAuthAddr         )m_library->resolve("OpenSDK_SetAuthAddr");
-        m_apis.pOpenSDK_SetPlatformAddr      = (EZSDK_SetPlatformAddr     )m_library->resolve("OpenSDK_SetPlatformAddr");
-        m_apis.pOpenSDK_SetAppID             = (EZSDK_SetAppID            )m_library->resolve("OpenSDK_SetAppID");
-        m_apis.pOpenSDK_FiniLib              = (EZSDK_FiniLib             )m_library->resolve("OpenSDK_FiniLib");
-        m_apis.pOpenSDK_SetLoginParams       = (EZSDK_SetLoginParams      )m_library->resolve("OpenSDK_SetLoginParams");
-        m_apis.pOpenSDK_GetLoginResponseParams = (EZSDK_GetLoginResponseParams)m_library->resolve("OpenSDK_GetLoginResponseParams");
-        m_apis.pOpenSDK_Logout               = (EZSDK_Logout              )m_library->resolve("OpenSDK_Logout");
-        m_apis.pOpenSDK_SetAccessToken       = (EZSDK_SetAccessToken      )m_library->resolve("OpenSDK_SetAccessToken");
-        m_apis.pOpenSDK_SetConfigInfo        = (EZSDK_SetConfigInfo		  )m_library->resolve("OpenSDK_SetConfigInfo");
-        m_apis.pOpenSDK_AllocSessionEx       = (EZSDK_AllocSessionEx      )m_library->resolve("OpenSDK_AllocSessionEx");
-        m_apis.pOpenSDK_FreeSession          = (EZSDK_FreeSession         )m_library->resolve("OpenSDK_FreeSession");
-        m_apis.pOpenSDK_SetSessionConfig     = (EZSDK_SetSessionConfig    )m_library->resolve("OpenSDK_SetSessionConfig");
-        m_apis.pOpenSDK_startRealPlay        = (EZSDK_StartRealPlayEx     )m_library->resolve("OpenSDK_StartRealPlayEx");
-        m_apis.pOpenSDK_setVideoLevel        = (EZSDK_SetVideoLevel       )m_library->resolve("OpenSDK_SetVideoLevel");
-        m_apis.pOpenSDK_stopRealPlay         = (EZSDK_StopRealPlayEx      )m_library->resolve("OpenSDK_StopRealPlayEx");
-        m_apis.pOpenSDK_startPlayBack        = (EZSDK_StartPlayBackEx     )m_library->resolve("OpenSDK_StartPlayBackEx");
-        m_apis.pOpenSDK_PlayBackResume       = (EZSDK_PlayBackResume      )m_library->resolve("OpenSDK_PlayBackResume");
-        m_apis.pOpenSDK_PlayBackPause        = (EZSDK_PlayBackPause       )m_library->resolve("OpenSDK_PlayBackPause");
-        m_apis.pOpenSDK_SetPlayBackScale     = (EZSDK_SetPlayBackScale    )m_library->resolve("OpenSDK_SetPlayBackScale");
-        m_apis.pOpenSDK_stopPlayBack         = (EZSDK_StopPlayBackEx      )m_library->resolve("OpenSDK_StopPlayBackEx");
-        m_apis.pOpenSDK_StartDownload        = (EZSDK_StartDownloadCloudFile)m_library->resolve("OpenSDK_StartDownloadCloudFile");
-        m_apis.pOpenSDK_StopDownload         = (EZSDK_StopDownloadCloudFile )m_library->resolve("OpenSDK_StopDownloadCloudFile");
-        m_apis.pOpenSDK_SetDataCallBack      = (EZSDK_SetDataCallBack     )m_library->resolve("OpenSDK_SetDataCallBack");
-        m_apis.pOpenSDK_startSearch          = (EZSDK_StartSearchEx       )m_library->resolve("OpenSDK_StartSearchEx");
-        m_apis.pOpenSDK_startSearchExtend    = (EZSDK_StartSearchExtend   )m_library->resolve("OpenSDK_StartSearchExtend");
-        m_apis.pOpenSDK_GetOSDTime           = (EZSDK_GetOSDTime          )m_library->resolve("OpenSDK_GetOSDTime");
+        m_apis.pOpenSDK_InitLib              = reinterpret_cast<EZSDK_InitLib>(m_library->resolve("OpenSDK_InitLib"));
+        m_apis.pOpenSDK_SetAuthAddr          = reinterpret_cast<EZSDK_SetAuthAddr>(m_library->resolve("OpenSDK_SetAuthAddr"));
+        m_apis.pOpenSDK_SetPlatformAddr      = reinterpret_cast<EZSDK_SetPlatformAddr>(m_library->resolve("OpenSDK_SetPlatformAddr"));
+        m_apis.pOpenSDK_SetAppID             = reinterpret_cast<EZSDK_SetAppID>(m_library->resolve("OpenSDK_SetAppID"));
+        m_apis.pOpenSDK_FiniLib              = reinterpret_cast<EZSDK_FiniLib>(m_library->resolve("OpenSDK_FiniLib"));
+        m_apis.pOpenSDK_SetLoginParams       = reinterpret_cast<EZSDK_SetLoginParams>(m_library->resolve("OpenSDK_SetLoginParams"));
+        m_apis.pOpenSDK_GetLoginResponseParams = reinterpret_cast<EZSDK_GetLoginResponseParams>(m_library->resolve("OpenSDK_GetLoginResponseParams"));
+        m_apis.pOpenSDK_Logout               = reinterpret_cast<EZSDK_Logout>(m_library->resolve("OpenSDK_Logout"));
+        m_apis.pOpenSDK_SetAccessToken       = reinterpret_cast<EZSDK_SetAccessToken>(m_library->resolve("OpenSDK_SetAccessToken"));
+        m_apis.pOpenSDK_SetConfigInfo        = reinterpret_cast<EZSDK_SetConfigInfo>(m_library->resolve("OpenSDK_SetConfigInfo"));
+        m_apis.pOpenSDK_AllocSessionEx       = reinterpret_cast<EZSDK_AllocSessionEx>(m_library->resolve("OpenSDK_AllocSessionEx"));
+        m_apis.pOpenSDK_FreeSession          = reinterpret_cast<EZSDK_FreeSession>(m_library->resolve("OpenSDK_FreeSession"));
+        m_apis.pOpenSDK_SetSessionConfig     = reinterpret_cast<EZSDK_SetSessionConfig>(m_library->resolve("OpenSDK_SetSessionConfig"));
+        m_apis.pOpenSDK_startRealPlay        = reinterpret_cast<EZSDK_StartRealPlayEx>(m_library->resolve("OpenSDK_StartRealPlayEx"));
+        m_apis.pOpenSDK_setVideoLevel        = reinterpret_cast<EZSDK_SetVideoLevel>(m_library->resolve("OpenSDK_SetVideoLevel"));
+        m_apis.pOpenSDK_stopRealPlay         = reinterpret_cast<EZSDK_StopRealPlayEx>(m_library->resolve("OpenSDK_StopRealPlayEx"));
+        m_apis.pOpenSDK_startPlayBack        = reinterpret_cast<EZSDK_StartPlayBackEx>(m_library->resolve("OpenSDK_StartPlayBackEx"));
+        m_apis.pOpenSDK_PlayBackResume       = reinterpret_cast<EZSDK_PlayBackResume>(m_library->resolve("OpenSDK_PlayBackResume"));
+        m_apis.pOpenSDK_PlayBackPause        = reinterpret_cast<EZSDK_PlayBackPause>(m_library->resolve("OpenSDK_PlayBackPause"));
+        m_apis.pOpenSDK_SetPlayBackScale     = reinterpret_cast<EZSDK_SetPlayBackScale>(m_library->resolve("OpenSDK_SetPlayBackScale"));
+        m_apis.pOpenSDK_stopPlayBack         = reinterpret_cast<EZSDK_StopPlayBackEx>(m_library->resolve("OpenSDK_StopPlayBackEx"));
+        m_apis.pOpenSDK_StartDownload        = reinterpret_cast<EZSDK_StartDownloadCloudFile>(m_library->resolve("OpenSDK_StartDownloadCloudFile"));
+        m_apis.pOpenSDK_StopDownload         = reinterpret_cast<EZSDK_StopDownloadCloudFile>(m_library->resolve("OpenSDK_StopDownloadCloudFile"));
+        m_apis.pOpenSDK_SetDataCallBack      = reinterpret_cast<EZSDK_SetDataCallBack>(m_library->resolve("OpenSDK_SetDataCallBack"));
+        m_apis.pOpenSDK_startSearch          = reinterpret_cast<EZSDK_StartSearchEx>(m_library->resolve("OpenSDK_StartSearchEx"));
+        m_apis.pOpenSDK_startSearchExtend    = reinterpret_cast<EZSDK_StartSearchExtend>(m_library->resolve("OpenSDK_StartSearchExtend"));
+        m_apis.pOpenSDK_GetOSDTime           = reinterpret_cast<EZSDK_GetOSDTime>(m_library->resolve("OpenSDK_GetOSDTime"));
 
-        m_apis.pOpenSDK_OpenSound            = (EZSDK_OpenSound           )m_library->resolve("OpenSDK_OpenSound");
-        m_apis.pOpenSDK_CloseSound           = (EZSDK_CloseSound          )m_library->resolve("OpenSDK_CloseSound");
-        m_apis.pOpenSDK_GetVolume            = (EZSDK_GetVolume           )m_library->resolve("OpenSDK_GetVolume");
-        m_apis.pOpenSDK_SetVolume            = (EZSDK_SetVolume           )m_library->resolve("OpenSDK_SetVolume");
-        m_apis.pOpenSDK_StartVoiceTalk       = (EZSDK_StartVoiceTalkEx    )m_library->resolve("OpenSDK_StartVoiceTalkEx");
-        m_apis.pOpenSDK_StopVoiceTalk        = (EZSDK_StopVoiceTalk       )m_library->resolve("OpenSDK_StopVoiceTalk");
-        m_apis.pOpenSDK_CapturePicture       = (EZSDK_CapturePicture      )m_library->resolve("OpenSDK_CapturePicture");
+        m_apis.pOpenSDK_OpenSound            = reinterpret_cast<EZSDK_OpenSound>(m_library->resolve("OpenSDK_OpenSound"));
+        m_apis.pOpenSDK_CloseSound           = reinterpret_cast<EZSDK_CloseSound>(m_library->resolve("OpenSDK_CloseSound"));
+        m_apis.pOpenSDK_GetVolume            = reinterpret_cast<EZSDK_GetVolume>(m_library->resolve("OpenSDK_GetVolume"));
+        m_apis.pOpenSDK_SetVolume            = reinterpret_cast<EZSDK_SetVolume>(m_library->resolve("OpenSDK_SetVolume"));
+        m_apis.pOpenSDK_StartVoiceTalk       = reinterpret_cast<EZSDK_StartVoiceTalkEx>(m_library->resolve("OpenSDK_StartVoiceTalkEx"));
+        m_apis.pOpenSDK_StopVoiceTalk        = reinterpret_cast<EZSDK_StopVoiceTalk>(m_library->resolve("OpenSDK_StopVoiceTalk"));
+        m_apis.pOpenSDK_CapturePicture       = reinterpret_cast<EZSDK_CapturePicture>(m_library->resolve("OpenSDK_CapturePicture"));
 
-        m_apis.pOpenSDK_Mid_Login            = (EZSDK_Mid_Login           )m_library->resolve("OpenSDK_Mid_Login");
-        m_apis.pOpenSDK_Mid_Device_Add       = (EZSDK_Mid_Device_Add      )m_library->resolve("OpenSDK_Mid_Device_Add");
-        m_apis.pOpenSDK_Mid_Device_Oper      = (EZSDK_Mid_Device_Oper     )m_library->resolve("OpenSDK_Mid_Device_Oper");
+        m_apis.pOpenSDK_Mid_Login            = reinterpret_cast<EZSDK_Mid_Login>(m_library->resolve("OpenSDK_Mid_Login"));
+        m_apis.pOpenSDK_Mid_Device_Add       = reinterpret_cast<EZSDK_Mid_Device_Add>(m_library->resolve("OpenSDK_Mid_Device_Add"));
+        m_apis.pOpenSDK_Mid_Device_Oper      = reinterpret_cast<EZSDK_Mid_Device_Oper>(m_library->resolve("OpenSDK_Mid_Device_Oper"));
 
-        m_apis.pOpenSDK_Data_GetDevListEx    = (EZSDK_Data_GetDevListEx   )m_library->resolve("OpenSDK_Data_GetDevListEx");
-        m_apis.pOpenSDK_Data_GetSharedDevList = (EZSDK_Data_GetSharedDevList)m_library->resolve("OpenSDK_Data_GetSharedDevList");
-        m_apis.pOpenSDK_Data_GetDeviceInfo   = (EZSDK_Data_GetDeviceInfo  )m_library->resolve("OpenSDK_Data_GetDeviceInfo");
-        m_apis.pOpenSDK_Data_GetAlarmListEx  = (EZSDK_Data_GetAlarmListEx )m_library->resolve("OpenSDK_Data_GetAlarmListEx");
-        m_apis.pOpenSDK_Data_SetAlarmRead    = (EZSDK_Data_SetAlarmRead   )m_library->resolve("OpenSDK_Data_SetAlarmRead");
-        m_apis.pOpenSDK_Data_DeleteDevice    = (EZSDK_Data_DeleteDevice   )m_library->resolve("OpenSDK_Data_DeleteDevice");
-        m_apis.pOpenSDK_Data_Free            = (EZSDK_Data_Free           )m_library->resolve("OpenSDK_Data_Free");
-        m_apis.pOpenSDK_Data_GetDevDetailInfo   = (EZSDK_Data_GetDevDetailInfo)m_library->resolve("OpenSDK_Data_GetDevDetailInfo");
+        m_apis.pOpenSDK_Data_GetDevListEx    = reinterpret_cast<EZSDK_Data_GetDevListEx>(m_library->resolve("OpenSDK_Data_GetDevListEx"));
+        m_apis.pOpenSDK_Data_GetSharedDevList = reinterpret_cast<EZSDK_Data_GetSharedDevList>(m_library->resolve("OpenSDK_Data_GetSharedDevList"));
+        m_apis.pOpenSDK_Data_GetDeviceInfo   = reinterpret_cast<EZSDK_Data_GetDeviceInfo>(m_library->resolve("OpenSDK_Data_GetDeviceInfo"));
+        m_apis.pOpenSDK_Data_GetAlarmListEx  = reinterpret_cast<EZSDK_Data_GetAlarmListEx>(m_library->resolve("OpenSDK_Data_GetAlarmListEx"));
+        m_apis.pOpenSDK_Data_SetAlarmRead    = reinterpret_cast<EZSDK_Data_SetAlarmRead>(m_library->resolve("OpenSDK_Data_SetAlarmRead"));
+        m_apis.pOpenSDK_Data_DeleteDevice    = reinterpret_cast<EZSDK_Data_DeleteDevice>(m_library->resolve("OpenSDK_Data_DeleteDevice"));
+        m_apis.pOpenSDK_Data_Free            = reinterpret_cast<EZSDK_Data_Free>(m_library->resolve("OpenSDK_Data_Free"));
+        m_apis.pOpenSDK_Data_GetDevDetailInfo   = reinterpret_cast<EZSDK_Data_GetDevDetailInfo>(m_library->resolve("OpenSDK_Data_GetDevDetailInfo"));
 
-        m_apis.pOpenSDK_PTZCtrlEx                = (EZSDK_PTZCtrlEx               )m_library->resolve("OpenSDK_PTZCtrlEx");
-        m_apis.pOpenSDK_DevDefenceEx             = (EZSDK_DevDefenceEx            )m_library->resolve("OpenSDK_DevDefenceEx");
+        m_apis.pOpenSDK_PTZCtrlEx                = reinterpret_cast<EZSDK_PTZCtrlEx>(m_library->resolve("OpenSDK_PTZCtrlEx"));
+        m_apis.pOpenSDK_DevDefenceEx             = reinterpret_cast<EZSDK_DevDefenceEx>(m_library->resolve("OpenSDK_DevDefenceEx"));
 
-        m_apis.pOpenSDK_GetAccessTokenSmsCode    = (EZSDK_GetAccessTokenSmsCode   )m_library->resolve("OpenSDK_GetAccessTokenSmsCode");
-        m_apis.pOpenSDK_VerifyAccessTokenSmsCode = (EZSDK_VerifyAccessTokenSmsCode)m_library->resolve("OpenSDK_VerifyAccessTokenSmsCode");
-        m_apis.pOpenSDK_GetHdSignSmsCode         = (EZSDK_GetHdSignSmsCode        )m_library->resolve("OpenSDK_GetHdSignSmsCode");
-        m_apis.pOpenSDK_VerifyHdSignSmsCode      = (EZSDK_VerifyHdSignSmsCode     )m_library->resolve("OpenSDK_VerifyHdSignSmsCode");
+        m_apis.pOpenSDK_GetAccessTokenSmsCode    = reinterpret_cast<EZSDK_GetAccessTokenSmsCode>(m_library->resolve("OpenSDK_GetAccessTokenSmsCode"));
+        m_apis.pOpenSDK_VerifyAccessTokenSmsCode = reinterpret_cast<EZSDK_VerifyAccessTokenSmsCode>(m_library->resolve("OpenSDK_VerifyAccessTokenSmsCode"));
+        m_apis.pOpenSDK_GetHdSignSmsCode         = reinterpret_cast<EZSDK_GetHdSignSmsCode>(m_library->resolve("OpenSDK_GetHdSignSmsCode"));
+        m_apis.pOpenSDK_VerifyHdSignSmsCode      = reinterpret_cast<EZSDK_VerifyHdSignSmsCode>(m_library->resolve("OpenSDK_VerifyHdSignSmsCode"));
 		
-		m_apis.pOpenSDK_HttpSendWithWait		 = (EZSDK_HttpSendWithWait		)m_library->resolve("OpenSDK_HttpSendWithWait");
+        m_apis.pOpenSDK_HttpSendWithWait		 = reinterpret_cast<EZSDK_HttpSendWithWait>(m_library->resolve("OpenSDK_HttpSendWithWait"));
 
-		m_apis.pOpenSDK_Push_SetAlarmCallBack				= (EZSDK_Push_SetAlarmCallBack				)m_library->resolve("OpenSDK_Push_SetAlarmCallBack");
-		m_apis.pOpenSDK_Push_SetDeviceStatusCallBack		= (EZSDK_Push_SetDeviceStatusCallBack			)m_library->resolve("OpenSDK_Push_SetDeviceStatusCallBack");
-		m_apis.pOpenSDK_Push_SetTransparentChannelCallBack  = (EZSDK_Push_SetTransparentChannelCallBack	)m_library->resolve("OpenSDK_Push_SetTransparentChannelCallBack");
-        m_apis.pOpenSDK_Push_StartRecvEx					= (EZSDK_Push_StartRecvEx						)m_library->resolve("OpenSDK_Push_StartRecvEx");
-		m_apis.pOpenSDK_Push_StopRecv						= (EZSDK_Push_StopRecv						)m_library->resolve("OpenSDK_Push_StopRecv");
-		m_apis.pOpenSDK_DecryptPicture						= (EZSDK_DecryptPicture						)m_library->resolve("OpenSDK_DecryptPicture");
+        m_apis.pOpenSDK_Push_SetAlarmCallBack				= reinterpret_cast<EZSDK_Push_SetAlarmCallBack>(m_library->resolve("OpenSDK_Push_SetAlarmCallBack"));
+        m_apis.pOpenSDK_Push_SetDeviceStatusCallBack		= reinterpret_cast<EZSDK_Push_SetDeviceStatusCallBack>(m_library->resolve("OpenSDK_Push_SetDeviceStatusCallBack"));
+        m_apis.pOpenSDK_Push_SetTransparentChannelCallBack  = reinterpret_cast<EZSDK_Push_SetTransparentChannelCallBack>(m_library->resolve("OpenSDK_Push_SetTransparentChannelCallBack"));
+        m_apis.pOpenSDK_Push_StartRecvEx					= reinterpret_cast<EZSDK_Push_StartRecvEx>(m_library->resolve("OpenSDK_Push_StartRecvEx"));
+        m_apis.pOpenSDK_Push_StopRecv						= reinterpret_cast<EZSDK_Push_StopRecv>(m_library->resolve("OpenSDK_Push_StopRecv"));
+        m_apis.pOpenSDK_DecryptPicture						= reinterpret_cast<EZSDK_DecryptPicture>(m_library->resolve("OpenSDK_DecryptPicture"));
 
-		m_apis.pOpenSDK_GetLastErrorCode       = (EZSDK_GetLastErrorCode      )m_library->resolve("OpenSDK_GetLastErrorCode");
-		m_apis.pOpenSDK_GetLastErrorDesc       = (EZSDK_GetLastErrorDesc      )m_library->resolve("OpenSDK_GetLastErrorDesc");
+        m_apis.pOpenSDK_GetLastErrorCode       = reinterpret_cast<EZSDK_GetLastErrorCode>(m_library->resolve("OpenSDK_GetLastErrorCode"));
+        m_apis.pOpenSDK_GetLastErrorDesc       = reinterpret_cast<EZSDK_GetLastErrorDesc>(m_library->resolve("OpenSDK_GetLastErrorDesc"));
 
     }
     else {
-        QMessageBox::critical(NULL, "Load OpenNetStream lib failed, path" + dllPath, m_library->errorString());
+        qWarning() << dllPath <<"动态链接库加载失败";
         exit(-1);
     }
 }
@@ -219,10 +210,9 @@ const char* OpenNetStream::getAccessToken()
 QString OpenNetStream::login()
 {
     Q_D(OpenNetStream);
-    char* pToken = NULL;
+    char* pToken = nullptr;
     int length = 0;
     d->m_apis.pOpenSDK_Mid_Login(&pToken, &length);
-    qDebug()<<"OpenSDK_Mid_Login token:"<<pToken;
     QString token = pToken;
     return token;
 }
@@ -269,7 +259,7 @@ int OpenNetStream::deviceOper(const QString& accessId, const QString& deviceId)
 QString OpenNetStream::allocSessionEx(OpenSDK_MessageHandler handle, void* pUser)
 {
     Q_D(OpenNetStream);
-    char* pSession = NULL;
+    char* pSession = nullptr;
     int length = 0;
     d->m_apis.pOpenSDK_AllocSessionEx(handle, pUser, &pSession, &length);
     QString session = pSession;
